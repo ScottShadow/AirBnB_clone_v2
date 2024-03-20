@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 """This module defines a base class for all models in our hbnb clone"""
-import uuid
-from datetime import datetime
-import models
-from sqlalchemy import Column, Integer, String, MetaData
 from sqlalchemy.ext.declarative import declarative_base
+import uuid
+import models
+from datetime import datetime
+from sqlalchemy import Column, Integer, String, DateTime, MetaData
 
 mymetadata = MetaData()
 Base = declarative_base(metadata=mymetadata)
@@ -32,7 +32,6 @@ class BaseModel:
                         value, time_iso_format))
                 else:
                     setattr(self, key, value)
-
 
     def __str__(self):
         """Returns a string representation of the instance"""
