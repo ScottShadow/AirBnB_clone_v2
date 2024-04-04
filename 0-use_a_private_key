@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Define the list of IP addresses
+ip1=54.85.131.209
+ip2=100.25.163.221
+ip3=34.234.204.170
+
+# Check if an IP address is provided as a command-line argument
+if [ -z "$1" ]; then
+    echo "Usage: $0 <ip_number>"
+    exit 1
+fi
+
+# Determine the IP address based on the provided argument
+case $1 in
+    1)
+        ip=$ip1
+        ;;
+    2)
+        ip=$ip2
+        ;;
+    3)
+        ip=$ip3
+        ;;
+    *)
+        echo "Invalid IP number"
+        exit 1
+        ;;
+esac
+
+# Connect to the server using SSH
+ssh -v -i ~/.ssh/school ubuntu@$ip
