@@ -43,7 +43,7 @@ def do_deploy(archive_path):
     Deploys a new version of the web application to the web servers.
 
     Args:
-        archive_path (str): Path to the archive file containing the new version.
+        archive_path (str): Path to the archive file contan new version.
 
     Returns:
         bool: True if the deployment was successful, False otherwise.
@@ -73,7 +73,7 @@ def do_deploy(archive_path):
         # Remove the temporary archive file
         run(f"sudo rm {file_arch}")
 
-        # Move the contents of the web_static directory to the new version directory
+        # Move the contents of the web_static directory to the new ver dir
         run(f"sudo mv {new_ver}/web_static/* {new_ver}")
 
         # Remove the web_static directory
