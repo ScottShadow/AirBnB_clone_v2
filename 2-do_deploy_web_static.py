@@ -11,7 +11,6 @@ env.hosts = ["54.85.131.209", "100.25.163.221"]
 env.user = "ubuntu"
 
 
-@task
 def do_pack():
     """
     Packs the "web_static" directory into a .tgz archive and returns the
@@ -39,7 +38,6 @@ def do_pack():
         return None
 
 
-@task
 def do_deploy(archive_path):
     """
     Deploys a new version of the web application to the web servers.
