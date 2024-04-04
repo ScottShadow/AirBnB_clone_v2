@@ -29,7 +29,7 @@ sudo chown -R ubuntu:ubuntu /data/
 #setup nginx server block
 printf %s "server {
     listen 80 default_server;
-    listen [::]:80 default_server;
+    listen 85;
     add_header X-Served-By $HOSTNAME;
     root   /var/www/html;
     index  index.html index.htm;
@@ -38,7 +38,7 @@ printf %s "server {
         index index.html index.htm;
     }
     location /redirect_me {
-        return 301 https://www.youtube.com/channel/UCvo9gk4s8yS-X_OV-FvKi1Q
+        return 301 https://www.youtube.com/channel/UCvo9gk4s8yS-X_OV-FvKi1Q;
     }
     error_page 404 /404.html;
     location /404 {
