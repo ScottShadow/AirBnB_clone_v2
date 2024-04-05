@@ -18,77 +18,84 @@ def do_pack():
     """
 
     # Create the "versions" directory if it doesn't exist
-    local("mkdir -p versions")
+    if os.path.isdir("versions") is False:
+        if local("mkdir -p versions").failed is True:
+            return None
 
     # Get the current date and time and format it as a string
     date = datetime.now().strftime("%Y%m%d%H%M%S")
 
-    # Construct the path for the archive file
-    arch_file_path = f"versions/web_static_{date}.tgz"
+    # Construct the path for the archive my_file
+    arch_my_file_path = f"versions/web_static_{date}.tgz"
 
     # Pack the "web_static" directory into a .tgz archive and save it to the
     # specified path
-    t_gzip = local(f"tar -cvzf {arch_file_path} web_static")
+    t_gzip = local(f"tar -cvzf {arch_my_file_path} web_static")
 
     # If the packing process succeeded, return the path of the created
     # archive, otherwise return None
     if t_gzip.succeeded:
-        return arch_file_path
+        return arch_my_file_path
     else:
         return None
 
 
 def do_deploy(archive_path):
     """
-    Deploys a new version of the web application to the web servers.
+    Deploys a tar.gz archive to the remote server.
 
     Args:
-        archive_path (str): Path to the archive file containing the new version.
+        archive_path (str): Path to the local archive my_file.
 
     Returns:
         bool: True if the deployment was successful, False otherwise.
     """
 
-    # Check if the archive file exists
-    if os.path.exists(archive_path):
+    # Check if the archive my_file exists
+    if os.path.isfile(archive_path) is False:
+        return False
 
-        # Extract the archive file name without the full path
-        file_arch = archive_path[9:]
+    # Extract archive my_file my_file_name and release my_file_name
+    my_file = archive_path.split("/")[-1]
+    my_file_name = my_file.split(".")[0]
 
-        # Construct the path for the new version of the application
-        new_ver = "/data/web_static/releases/" + file_arch[:-4]
+    # Upload the archive my_file to the remote server
+    if put(archive_path, f"/ tmp/{my_file}").failed:
+        return False
 
-        # Construct the path for the temporary location of the archive file
-        file_arch = "/tmp/" + file_arch
+    # Remove the release directory if it exists
+    if run(f"rm -rf /data/web_static/releases/{my_file_name}").failed:
+        return False
 
-        # Transfer the archive file to the remote servers
-        put(archive_path, "/tmp/")
+    # Create the release directory
+    if run(f"mkdir -p /data/web_static/releases/{my_file_name}").failed:
+        return False
 
-        # Create the directory for the new version of the application
-        run(f"sudo mkdir -p {new_ver}")
+    # Extract the archive to the release directory
+    if run(f"tar -xzf /tmp/{my_file} -C /data/web_static/releases/{my_file_name}").failed:
+        return False
 
-        # Extract the contents of the archive file to the new version directory
-        run(f"sudo tar -xzf {file_arch} -C {new_ver}/")
+    # Remove the uploaded archive my_file
+    if run(f"rm /tmp/{my_file}").failed:
+        return False
 
-        # Remove the temporary archive file
-        run(f"sudo rm {file_arch}")
+    # Move the contents of the extracted archive to the release directory
+    if run(f"mv /data/web_static/releases/{my_file_name}/web_static/* "
+           f"/data/web_static/releases/{my_file_name}/").failed:
+        return False
 
-        # Move the contents of the web_static directory to the new version directory
-        run(f"sudo mv {new_ver}/web_static/* {new_ver}")
+    # Remove the extracted directory
+    if run(f"rm -rf /data/web_static/releases/{my_file_name}/web_static").failed:
+        return False
 
-        # Remove the web_static directory
-        run(f"sudo rm -rf {new_ver}/web_static")
+    # Remove the current symlink
+    if run("rm -rf /data/web_static/current").failed:
+        return False
 
-        # Remove the current version of the application
-        run("sudo rm -rf /data/web_static/current")
+    # Create a symlink to the newly deployed release
+    original = f"/data/web_static/releases/{my_file_name}/"
+    if run(f"ln -s {original} /data/web_static/current").failed:
+        return False
 
-        # Create a symbolic link to the new version of the application
-        run(f"sudo ln -s {new_ver} /data/web_static/current")
-
-        print("New version deployed!")
-
-        # Return True to indicate successful deployment
-        return True
-
-    # Return False if the archive file does not exist
-    return False
+    # Deployment successful
+    return True
