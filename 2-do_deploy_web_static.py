@@ -58,6 +58,7 @@ def do_deploy(archive_path):
     # Extract archive my_file my_file_name and release my_file_name
     my_file = archive_path.split("/")[-1]
     my_file_name = my_file.split(".")[0]
+    original = f"/data/web_static/releases/{my_file_name}/"
 
     # Upload the archive my_file to the remote server
     if put(archive_path, f"/ tmp/{my_file}").failed:
@@ -72,7 +73,7 @@ def do_deploy(archive_path):
         return False
 
     # Extract the archive to the release directory
-    if run(f"tar -xzf /tmp/{my_file} -C /data/web_static/releases/{my_file_name}").failed:
+    if run(f"tar -xzf /tmp/{my_file} -C {original}").failed:
         return False
 
     # Remove the uploaded archive my_file
@@ -93,7 +94,6 @@ def do_deploy(archive_path):
         return False
 
     # Create a symlink to the newly deployed release
-    original = f"/data/web_static/releases/{my_file_name}/"
     if run(f"ln -s {original} /data/web_static/current").failed:
         return False
 
