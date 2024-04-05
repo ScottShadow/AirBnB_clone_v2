@@ -86,7 +86,7 @@ def do_deploy(archive_path):
         return False
 
     # Remove the extracted directory
-    if run(f"rm -rf /data/web_static/releases/{my_file_name}/web_static").failed:
+    if run(f"rm -rf {original}/web_static").failed:
         return False
 
     # Remove the current symlink
