@@ -124,6 +124,16 @@ CREATE TABLE reviews (
   FOREIGN KEY(place_id) REFERENCES places (id),
   FOREIGN KEY(user_id) REFERENCES users (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+DROP TABLE IF EXISTS `amenity`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE place_amenity (
+  `place_id` VARCHAR(60) NOT NULL,
+  `amenity_id` VARCHAR(60) NOT NULL,
+  PRIMARY KEY (place_id, amenity_id),
+  FOREIGN KEY(place_id) REFERENCES places (id),
+  FOREIGN KEY(amenity_id) REFERENCES amenities (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 --
 -- Dumping data for table `states`
 --
