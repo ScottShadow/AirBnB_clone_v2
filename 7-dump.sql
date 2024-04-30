@@ -109,7 +109,21 @@ CREATE TABLE users (
   UNIQUE (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
+DROP TABLE IF EXISTS `reviews`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE reviews (
+  `id` VARCHAR(60) NOT NULL,
+  `created_at` DATETIME NOT NULL,
+  `updated_at` DATETIME NOT NULL,
+  `text` VARCHAR(1024) NOT NULL,
+  `place_id` VARCHAR(60) NOT NULL,
+  `user_id` VARCHAR(60) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE (id),
+  FOREIGN KEY(place_id) REFERENCES places (id),
+  FOREIGN KEY(user_id) REFERENCES users (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 --
 -- Dumping data for table `states`
 --
