@@ -88,10 +88,10 @@ CREATE TABLE places (
   `price_by_night` INTEGER NOT NULL,
   `latitude` FLOAT,
   `longitude` FLOAT,
-  PRIMARY KEY (id),
-  UNIQUE (id),
-  FOREIGN KEY(city_id) REFERENCES cities (id),
-  FOREIGN KEY(user_id) REFERENCES users (id)
+  PRIMARY KEY (`id`),
+  UNIQUE (`id`),
+  FOREIGN KEY(city_id) REFERENCES cities (`id`),
+  FOREIGN KEY(user_id) REFERENCES users (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS `users`;
@@ -105,8 +105,8 @@ CREATE TABLE users (
   `password` VARCHAR(128) NOT NULL,
   `first_name` VARCHAR(128),
   `last_name` VARCHAR(128),
-  PRIMARY KEY (id),
-  UNIQUE (id)
+  PRIMARY KEY (`id`),
+  UNIQUE (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `reviews`;
@@ -119,10 +119,10 @@ CREATE TABLE reviews (
   `text` VARCHAR(1024) NOT NULL,
   `place_id` VARCHAR(60) NOT NULL,
   `user_id` VARCHAR(60) NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE (id),
-  FOREIGN KEY(place_id) REFERENCES places (id),
-  FOREIGN KEY(user_id) REFERENCES users (id)
+  PRIMARY KEY (`id`),
+  UNIQUE (`id`),
+  FOREIGN KEY(place_id) REFERENCES places (`id`),
+  FOREIGN KEY(user_id) REFERENCES users (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 DROP TABLE IF EXISTS `place_amenity`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -131,8 +131,8 @@ CREATE TABLE place_amenity (
   `place_id` VARCHAR(60) NOT NULL,
   `amenity_id` VARCHAR(60) NOT NULL,
   PRIMARY KEY (place_id, amenity_id),
-  FOREIGN KEY(place_id) REFERENCES places (id),
-  FOREIGN KEY(amenity_id) REFERENCES amenities (id)
+  FOREIGN KEY(place_id) REFERENCES places (`id`),
+  FOREIGN KEY(amenity_id) REFERENCES amenities (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 DROP TABLE IF EXISTS `amenities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -142,8 +142,8 @@ CREATE TABLE amenities (
   `created_at` DATETIME NOT NULL,
   `updated_at` DATETIME NOT NULL,
   `name` VARCHAR(128) NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE (id)
+  PRIMARY KEY (`id`),
+  UNIQUE (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 --
 -- Dumping data for table `states`
