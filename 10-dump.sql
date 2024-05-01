@@ -109,7 +109,69 @@ INSERT INTO `states` VALUES ('421a55f4-7d82-47d9-b54c-a76916479545','2017-03-25 
 /*!40000 ALTER TABLE `states` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+DROP TABLE IF EXISTS `places`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE places (
+  `id` VARCHAR(60) NOT NULL,
+  `created_at` DATETIME NOT NULL,
+  `updated_at` DATETIME NOT NULL,
+  `city_id` VARCHAR(60) NOT NULL,
+  `user_id` VARCHAR(60) NOT NULL,
+  `name` VARCHAR(128) NOT NULL,
+  `description` VARCHAR(1024),
+  `number_rooms` INTEGER NOT NULL,
+  `number_bathrooms` INTEGER NOT NULL,
+  `max_guest` INTEGER NOT NULL,
+  `price_by_night` INTEGER NOT NULL,
+  `latitude` FLOAT,
+  `longitude` FLOAT,
+  PRIMARY KEY (id),
+  UNIQUE (id),
+  FOREIGN KEY(city_id) REFERENCES cities (id),
+  FOREIGN KEY(user_id) REFERENCES users (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE users (
+  `id` VARCHAR(60) NOT NULL,
+  `created_at` DATETIME NOT NULL,
+  `updated_at` DATETIME NOT NULL,
+  `email` VARCHAR(128) NOT NULL,
+  `password` VARCHAR(128) NOT NULL,
+  `first_name` VARCHAR(128),
+  `last_name` VARCHAR(128),
+  PRIMARY KEY (id),
+  UNIQUE (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `reviews`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE reviews (
+  `id` VARCHAR(60) NOT NULL,
+  `created_at` DATETIME NOT NULL,
+  `updated_at` DATETIME NOT NULL,
+  `text` VARCHAR(1024) NOT NULL,
+  `place_id` VARCHAR(60) NOT NULL,
+  `user_id` VARCHAR(60) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE (id),
+  FOREIGN KEY(place_id) REFERENCES places (id),
+  FOREIGN KEY(user_id) REFERENCES users (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+DROP TABLE IF EXISTS `place_amenity`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE place_amenity (
+  `place_id` VARCHAR(60) NOT NULL,
+  `amenity_id` VARCHAR(60) NOT NULL,
+  PRIMARY KEY (place_id, amenity_id),
+  FOREIGN KEY(place_id) REFERENCES places (id),
+  FOREIGN KEY(amenity_id) REFERENCES amenities (id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
